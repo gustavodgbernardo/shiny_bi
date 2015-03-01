@@ -1,4 +1,5 @@
 library(shiny)
+library(Hmisc)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output){
@@ -12,26 +13,40 @@ shinyServer(function(input, output){
       }
     }  
   })
-  output$out_eixox <- renderUI({
-    if (input$proximo > 0){
-      selectInput("eixox", "Eixo x", c("",names(dados())))
+  output$out_elemento_linha <- renderUI({
+    if ( input$proximo > 0 ){
+      if (input$tipo_grafico == 2){
+        checkboxGroupInput("elemento_linha", "Linhas", c(names(dados())))
+      }
     }
   })
-  output$out_eixoy <- renderUI({
+  output$out_eixox <- renderUI({
     if (input$proximo > 0){
-      selectInput("eixoy", "Eixo y", c("",names(dados())))
+      if (input$tipo_grafico == 2){
+      selectInput("eixox", "Eixo x", c("",names(dados())))
+      }
     }
   })
   output$out_filtro <- renderUI({
     if (input$proximo > 0){
+      if (input$tipo_grafico == 2){
       selectInput("filtro", "Filtro", c("",names(dados())))
+      }
     }
   })
   output$aplica_filtros <- renderUI({
     if (length(input$filtro) > 0) {
       if (input$filtro != ""){
-        seleciona <- unique(as.character(dados()[,input$filtro]))  
-        checkboxGroupInput("selecao", "Selecionar filtro",seleciona)
+        classe <- all.is.numeric(dados()[,input$filtro],extras=c('.','NA','',NA))
+        if ( (classe) & (length(unique(dados()[,input$filtro])))>20){
+          max <- max(dados()[,input$filtro],na.rm=T)
+          min <- min(dados()[,input$filtro],na.rm=T)
+          sliderInput("slider_filtro", "Selecionar filtro",
+                      min = min, max = max, value = c(min, max))
+        }else{
+          seleciona <- unique(as.character(dados()[,input$filtro]))  
+          checkboxGroupInput("selecao", "Selecionar filtro",seleciona)  
+        }
       }
     }
   })

@@ -1,10 +1,11 @@
 library(shiny)
+library(Hmisc)
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(
   
   # Application title
-  titlePanel("Neoway - RDashboard"),
+  titlePanel("RDashboard"),
 
   sidebarLayout(
     sidebarPanel(
@@ -52,12 +53,41 @@ shinyUI(fluidPage(
              textInput("query", label = h5("query"),value = "")
            ),
            actionButton("proximo", label = "Próximo")),
-    mainPanel(uiOutput("out_eixox"),
-              uiOutput("out_eixoy"),
+    mainPanel(
+          column(3,
+             conditionalPanel(
+               condition = "input.proximo > 0",
+               selectInput('tipo_grafico', 'Graficos',
+                            list(
+                              "Linhas" = 2,
+                              "Barras" = 3,
+                              "Pizza" = 4,
+                              "Histograma" = 5,
+                              "Box-plot" = 6,
+                              "Area" = 7
+                            ))
+              ),
+             actionButton("grafico", label = "Gráfico")
+          ),  
+          column(4,
+              uiOutput("out_elemento_linha")
+
+          ),
+          column(4,
+              uiOutput("out_eixox"),
+              conditionalPanel(
+                condition = "(input.tipo_grafico == 2) & (input.proximo > 0)",
+                selectInput('tipo_op', 'Tipo Operacao',
+                            c("",
+                              "soma" ,
+                              "media" ,
+                              "contar" 
+                            ))
+              ),
               uiOutput("out_filtro"),
-              uiOutput("aplica_filtros"),
-              actionButton("grafico", label = "Gráfico")
-            )
-    )
-          
+              uiOutput("aplica_filtros")
+          )
+
+    )       
+  )          
 ))
