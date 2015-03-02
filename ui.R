@@ -84,10 +84,11 @@ shinyUI(fluidPage(
                               "contar" 
                             ))
               ),
+              uiOutput("out_grupo"),
               uiOutput("out_filtro"),
               uiOutput("aplica_filtros")
-          )
-
+          ),
+          plotOutput("graf_linhas")
     )       
   )          
 ))

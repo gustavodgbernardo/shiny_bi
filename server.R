@@ -1,7 +1,8 @@
 library(shiny)
 library(Hmisc)
+library(ggplot2)
+library(reshape2) 
 
-# Define server logic required to draw a histogram
 shinyServer(function(input, output){
   dados <- reactive({
     if (input$proximo > 0){
@@ -27,6 +28,13 @@ shinyServer(function(input, output){
       }
     }
   })
+  output$out_grupo <- renderUI({
+    if (input$proximo > 0){
+      if (input$tipo_grafico == 2){
+        selectInput("grupo_linha", "Grupo", c("",names(dados())))
+      }
+    }
+  })
   output$out_filtro <- renderUI({
     if (input$proximo > 0){
       if (input$tipo_grafico == 2){
@@ -49,5 +57,16 @@ shinyServer(function(input, output){
         }
       }
     }
+  })
+  output$graf_linhas <- renderPlot({
+      if (input$grafico > 0) {
+        x <- input$eixox 
+        linhas <- input$elemento_linha  
+        tabela_grafico <- dados()[,c(x,linhas)]
+        mdf <- melt(tabela_grafico, id.vars=x)
+        mdf[,x] <- factor(mdf[,x],unique(as.character(mdf[,x]))) 
+        names(mdf)[1] <- 'eixox'
+        ggplot(data=mdf, aes(x=eixox, y=value, group = variable , color = variable)) + geom_line() + geom_point()
+      }
   })
 })
