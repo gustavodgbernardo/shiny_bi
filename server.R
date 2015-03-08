@@ -49,19 +49,16 @@ shinyServer(function(input, output){
         if ( (classe) & (length(unique(dados()[,input$filtro])))>20){
           max <- max(dados()[,input$filtro],na.rm=T)
           min <- min(dados()[,input$filtro],na.rm=T)
-<<<<<<< HEAD
           sliderInput("selecao_slider", "Selecionar filtro",
                       min = min, max = max, value = c(min, max))
         }else{
           seleciona <- unique(as.character(dados()[,input$filtro]))  
           checkboxGroupInput("selecao_box", "Selecionar filtro",seleciona)  
-=======
           sliderInput("slider_filtro", "Selecionar filtro",
                       min = min, max = max, value = c(min, max))
         }else{
           seleciona <- unique(as.character(dados()[,input$filtro]))  
           checkboxGroupInput("selecao", "Selecionar filtro",seleciona)  
->>>>>>> origin/master
         }
       }
     }
@@ -69,7 +66,6 @@ shinyServer(function(input, output){
   output$graf_linhas <- renderPlot({
       if (input$grafico > 0) {
         x <- input$eixox 
-<<<<<<< HEAD
         linhas <- input$elemento_linha
         if (input$filtro != ""){
           if (length(input$selecao_box)>0){
@@ -86,12 +82,9 @@ shinyServer(function(input, output){
           
         }else{
           tabela_grafico <- dados()[,c(x,linhas)]
-        }
-        
-=======
+        }      
         linhas <- input$elemento_linha  
         tabela_grafico <- dados()[,c(x,linhas)]
->>>>>>> origin/master
         mdf <- melt(tabela_grafico, id.vars=x)
         mdf[,x] <- factor(mdf[,x],unique(as.character(mdf[,x]))) 
         names(mdf)[1] <- 'eixox'
