@@ -2,8 +2,6 @@ library(shiny)
 library(Hmisc)
 
 
-# mais um teste - conflito
-
 
 # Define UI for application that draws a histogram
 shinyUI(fluidPage(

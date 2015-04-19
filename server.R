@@ -1,7 +1,7 @@
 library(shiny)
 library(Hmisc)
 library(ggplot2)
-library(reshape2) 
+    
 
 shinyServer(function(input, output){
   dados <- reactive({
